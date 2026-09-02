@@ -1,10 +1,4 @@
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 
@@ -26,7 +20,7 @@ export default async function Home() {
           </div>
 
           <nav className="flex items-center gap-4">
-            <SignedOut>
+            <Show when="signed-out">
               <SignInButton mode="modal">
                 <button
                   type="button"
@@ -43,16 +37,16 @@ export default async function Home() {
                   Get Started
                 </button>
               </SignUpButton>
-            </SignedOut>
+            </Show>
 
-            <SignedIn>
+            <Show when="signed-in">
               <div className="flex items-center gap-3">
                 <span className="hidden text-sm text-zinc-600 sm:inline dark:text-zinc-400">
                   {user?.firstName ? `Hi, ${user.firstName}` : "Welcome"}
                 </span>
                 <UserButton />
               </div>
-            </SignedIn>
+            </Show>
           </nav>
         </div>
       </header>
@@ -76,7 +70,7 @@ export default async function Home() {
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <SignedOut>
+            <Show when="signed-out">
               <SignInButton mode="modal">
                 <button
                   type="button"
@@ -91,9 +85,9 @@ export default async function Home() {
               >
                 Create an Account
               </Link>
-            </SignedOut>
+            </Show>
 
-            <SignedIn>
+            <Show when="signed-in">
               <div className="rounded-xl border border-emerald-200 bg-emerald-50/80 p-4 text-sm text-emerald-800 dark:border-emerald-900/50 dark:bg-emerald-950/40 dark:text-emerald-300">
                 You are authenticated as{" "}
                 <span className="font-semibold">
@@ -101,7 +95,7 @@ export default async function Home() {
                 </span>
                 .
               </div>
-            </SignedIn>
+            </Show>
           </div>
         </div>
       </main>
