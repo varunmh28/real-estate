@@ -97,10 +97,8 @@ export default function RootLayout({
         <body
           className={`${inter.variable} ${plusJakarta.variable} ${geistMono.variable} font-body antialiased`}
         >
-          {/* Skip link for accessibility */}
-          <a href="#main" className="skip-link">
-            Skip to main content
-          </a>
+
+
           {children}
           <Toaster />
           <SanityLive />
