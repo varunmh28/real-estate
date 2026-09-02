@@ -1,7 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata, Viewport } from "next";
 import { Geist_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
-// import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/sonner";
 import { SanityLive } from "@/sanity/lib/live";
 import "./globals.css";
 
@@ -102,7 +102,7 @@ export default function RootLayout({
             Skip to main content
           </a>
           {children}
-          {/* <Toaster /> */}
+          <Toaster />
           <SanityLive />
         </body>
       </html>
