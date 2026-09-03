@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "seed": "tsx scripts/seed/seed.ts"
+    "seed": "tsx scripts/seed/seed.ts",
+    "typegen": "sanity schema extract --path=./schema.json && sanity typegen generate"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -17,11 +18,13 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.39.0",
+    "mapbox-gl": "^3.29.0",
     "next": "16.3.4",
     "next-sanity": "^13.3.4",
     "next-themes": "^0.4.6",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "react-map-gl": "^8.1.2",
     "sanity": "^6.12.0",
     "shadcn": "^4.19.1",
     "sonner": "^2.0.8",
