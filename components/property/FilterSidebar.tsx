@@ -238,7 +238,7 @@ export function FilterSidebar({ amenities }: FilterSidebarProps) {
           </Label>
           <Select
             value={filters.type}
-            onValueChange={(value) => handleFilterChange("type", value)}
+            onValueChange={(value) => handleFilterChange("type", value ?? "all")}
           >
             <SelectTrigger id="type" className="w-full">
               <SelectValue placeholder="All Types" />
@@ -295,7 +295,7 @@ export function FilterSidebar({ amenities }: FilterSidebarProps) {
             </Label>
             <Select
               value={filters.beds}
-              onValueChange={(value) => handleFilterChange("beds", value)}
+              onValueChange={(value) => handleFilterChange("beds", value ?? "0")}
             >
               <SelectTrigger id="beds" className="w-full">
                 <SelectValue placeholder="Any" />
@@ -316,7 +316,7 @@ export function FilterSidebar({ amenities }: FilterSidebarProps) {
             </Label>
             <Select
               value={filters.baths}
-              onValueChange={(value) => handleFilterChange("baths", value)}
+              onValueChange={(value) => handleFilterChange("baths", value ?? "0")}
             >
               <SelectTrigger id="baths" className="w-full">
                 <SelectValue placeholder="Any" />
@@ -334,26 +334,24 @@ export function FilterSidebar({ amenities }: FilterSidebarProps) {
 
         {/* More Filters - Collapsible */}
         <Collapsible open={moreFiltersOpen} onOpenChange={setMoreFiltersOpen}>
-          <CollapsibleTrigger asChild>
-            <button
-              type="button"
-              className="flex items-center justify-between w-full py-3 px-4 bg-accent/50 hover:bg-accent rounded-xl transition-colors"
-            >
-              <span className="text-sm font-medium flex items-center gap-2">
-                More Filters
-                {advancedFiltersCount > 0 && (
-                  <span className="bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full">
-                    {advancedFiltersCount}
-                  </span>
-                )}
-              </span>
-              <ChevronDown
-                className={`h-4 w-4 text-muted-foreground transition-transform ${
-                  moreFiltersOpen ? "rotate-180" : ""
-                }`}
-                aria-hidden="true"
-              />
-            </button>
+          <CollapsibleTrigger
+            type="button"
+            className="flex items-center justify-between w-full py-3 px-4 bg-accent/50 hover:bg-accent rounded-xl transition-colors"
+          >
+            <span className="text-sm font-medium flex items-center gap-2">
+              More Filters
+              {advancedFiltersCount > 0 && (
+                <span className="bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full">
+                  {advancedFiltersCount}
+                </span>
+              )}
+            </span>
+            <ChevronDown
+              className={`h-4 w-4 text-muted-foreground transition-transform ${
+                moreFiltersOpen ? "rotate-180" : ""
+              }`}
+              aria-hidden="true"
+            />
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-4 space-y-6">
             {/* Square Feet */}
@@ -478,7 +476,7 @@ export function FilterSidebar({ amenities }: FilterSidebarProps) {
               <Select
                 value={filters.daysOnMarket}
                 onValueChange={(value) =>
-                  handleFilterChange("daysOnMarket", value)
+                  handleFilterChange("daysOnMarket", value ?? "0")
                 }
               >
                 <SelectTrigger id="daysOnMarket" className="w-full">

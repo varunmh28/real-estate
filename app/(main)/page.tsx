@@ -19,7 +19,7 @@ export default async function HomePage() {
   const { data } = await sanityFetch({
     query: FEATURED_PROPERTIES_QUERY,
   });
-  const featuredProperties = (data as Property[]) ?? [];
+  const featuredProperties = (data as unknown as Property[]) ?? [];
 
   return (
     <div>

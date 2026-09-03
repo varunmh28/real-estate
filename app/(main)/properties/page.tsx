@@ -11,15 +11,16 @@ import { Suspense } from "react";
 import { DynamicMapView } from "@/components/map/DynamicMapView";
 import { FilterSidebar } from "@/components/property/FilterSidebar";
 import { PropertyGrid } from "@/components/property/PropertyGrid";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { sanityFetch } from "@/sanity/lib/live";
 import {
   AMENITIES_QUERY,
   PROPERTIES_COUNT_QUERY,
   PROPERTIES_SEARCH_QUERY,
 } from "@/lib/sanity/queries";
+import { sanityFetch } from "@/sanity/lib/live";
+import type { Amenity, Property } from "@/types";
 
 export const metadata: Metadata = {
   title: "Browse Properties",
@@ -96,20 +97,26 @@ export default async function PropertiesPage({
     end,
   };
 
-  const [{ data: properties }, { data: totalCount }, { data: amenities }] =
-    await Promise.all([
-      sanityFetch({
-        query: PROPERTIES_SEARCH_QUERY,
-        params: queryParams,
-      }),
-      sanityFetch({
-        query: PROPERTIES_COUNT_QUERY,
-        params: queryParams,
-      }),
-      sanityFetch({
-        query: AMENITIES_QUERY,
-      }),
-    ]);
+  const [
+    { data: rawProperties },
+    { data: totalCount },
+    { data: rawAmenities },
+  ] = await Promise.all([
+    sanityFetch({
+      query: PROPERTIES_SEARCH_QUERY,
+      params: queryParams,
+    }),
+    sanityFetch({
+      query: PROPERTIES_COUNT_QUERY,
+      params: queryParams,
+    }),
+    sanityFetch({
+      query: AMENITIES_QUERY,
+    }),
+  ]);
+
+  const properties = (rawProperties as unknown as Property[]) || [];
+  const amenities = (rawAmenities as unknown as Amenity[]) || [];
 
   const totalPages = Math.ceil((totalCount || 0) / ITEMS_PER_PAGE);
   const hasFilters =
@@ -162,7 +169,7 @@ export default async function PropertiesPage({
               <Suspense
                 fallback={<Skeleton className="h-[500px] w-full rounded-2xl" />}
               >
-                <FilterSidebar amenities={amenities || []} />
+                <FilterSidebar amenities={amenities} />
               </Suspense>
             </div>
           </aside>
@@ -214,20 +221,22 @@ export default async function PropertiesPage({
                         aria-label="Pagination"
                       >
                         {page > 1 ? (
-                          <Button variant="outline" size="sm" asChild>
-                            <Link
-                              href={`/properties?${new URLSearchParams({
-                                ...params,
-                                page: String(page - 1),
-                              }).toString()}`}
-                            >
-                              <ChevronLeft
-                                className="h-4 w-4 mr-1"
-                                aria-hidden="true"
-                              />
-                              Previous
-                            </Link>
-                          </Button>
+                          <Link
+                            href={`/properties?${new URLSearchParams({
+                              ...params,
+                              page: String(page - 1),
+                            }).toString()}`}
+                            className={buttonVariants({
+                              variant: "outline",
+                              size: "sm",
+                            })}
+                          >
+                            <ChevronLeft
+                              className="h-4 w-4 mr-1"
+                              aria-hidden="true"
+                            />
+                            Previous
+                          </Link>
                         ) : (
                           <Button variant="outline" size="sm" disabled>
                             <ChevronLeft
@@ -250,20 +259,22 @@ export default async function PropertiesPage({
                         </span>
 
                         {page < totalPages ? (
-                          <Button variant="outline" size="sm" asChild>
-                            <Link
-                              href={`/properties?${new URLSearchParams({
-                                ...params,
-                                page: String(page + 1),
-                              }).toString()}`}
-                            >
-                              Next
-                              <ChevronRight
-                                className="h-4 w-4 ml-1"
-                                aria-hidden="true"
-                              />
-                            </Link>
-                          </Button>
+                          <Link
+                            href={`/properties?${new URLSearchParams({
+                              ...params,
+                              page: String(page + 1),
+                            }).toString()}`}
+                            className={buttonVariants({
+                              variant: "outline",
+                              size: "sm",
+                            })}
+                          >
+                            Next
+                            <ChevronRight
+                              className="h-4 w-4 ml-1"
+                              aria-hidden="true"
+                            />
+                          </Link>
                         ) : (
                           <Button variant="outline" size="sm" disabled>
                             Next
@@ -294,9 +305,12 @@ export default async function PropertiesPage({
                         : "There are no properties available at the moment."}
                     </p>
                     {hasFilters && (
-                      <Button variant="outline" asChild>
-                        <Link href="/properties">Clear All Filters</Link>
-                      </Button>
+                      <Link
+                        href="/properties"
+                        className={buttonVariants({ variant: "outline" })}
+                      >
+                        Clear All Filters
+                      </Link>
                     )}
                   </div>
                 )}
@@ -304,7 +318,7 @@ export default async function PropertiesPage({
 
               <TabsContent value="map" className="mt-0">
                 <div className="h-[600px] rounded-2xl overflow-hidden border border-border/50 shadow-warm">
-                  <DynamicMapView properties={properties || []} />
+                  <DynamicMapView properties={properties} />
                 </div>
               </TabsContent>
             </Tabs>

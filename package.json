@@ -9,7 +9,7 @@
     "lint": "biome check",
     "format": "biome format --write",
     "seed": "tsx scripts/seed/seed.ts",
-    "typegen": "sanity schema extract --path=./schema.json && sanity typegen generate"
+    "typegen": "sanity schema extract --path=./schema.json --force && sanity typegen generate"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
